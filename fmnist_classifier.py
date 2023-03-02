@@ -3,6 +3,7 @@ import torch
 import torchmetrics
 from torch import nn
 from torch.nn import functional as F
+import hydra
 
 class LightningFMNISTClassifier(pl.LightningModule):
     def __init__(self, optimizer: torch.optim.Optimizer, lr: float):
