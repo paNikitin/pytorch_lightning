@@ -1,0 +1,6 @@
+params:
+  max_epochs: 1
+  lr: 0.003
+  batch_size: 256
+  optimizer: 
+    _target_: torch.optim.SGD
