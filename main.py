@@ -4,13 +4,7 @@ import pytorch_lightning as pl
 import hydra
 from config import FMNISTConfig
 from hydra.core.config_store import ConfigStore
-#trainer = pl.Trainer(max_epochs=1)
-#data_module = fmnist_data.FMNISTDataModule()
-#trainer.fit(model, data_module)
-#model.eval()
-#trainer.predict(model, data_module) 
-import torch
-import sys
+
 cs = ConfigStore.instance()
 cs.store(name="fmnist_config", node=FMNISTConfig)
 
