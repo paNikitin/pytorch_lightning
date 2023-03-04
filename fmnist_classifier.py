@@ -6,8 +6,7 @@ from torch.nn import functional as F
 import hydra
 
 class LightningFMNISTClassifier(pl.LightningModule):
-    def __init__(self, optimizer: torch.optim.Optimizer, lr: float):
-        #super(LightningFMNISTClassifier, self).__init__()
+    def __init__(self, opt_config):
         super().__init__()
         self.accuracy = torchmetrics.Accuracy(task="multiclass", num_classes=10)
         self.layer_1 = torch.nn.Linear(28 * 28,392)
@@ -15,8 +14,7 @@ class LightningFMNISTClassifier(pl.LightningModule):
         self.layer_3 = torch.nn.Linear(196, 98)
         self.layer_4 = torch.nn.Linear(98, 49)
         self.layer_5 = torch.nn.Linear(49, 10)
-        self.optimizer = optimizer
-        self.lr = lr
+        self.opt_config = opt_config
     
     def forward(self,x):
         batch_size, channels, width, height = x.size()
@@ -25,15 +23,15 @@ class LightningFMNISTClassifier(pl.LightningModule):
         
         x = self.layer_1(x)
         x = torch.relu(x)
-        x = torch.dropout(x, 0.1, train=True)
+        x = torch.dropout(x, 0.25, train=True)
         
         x = self.layer_2(x)
         x = torch.relu(x)
-        x = torch.dropout(x, 0.1, train=True)
+        x = torch.dropout(x, 0.25, train=True)
         
         x = self.layer_3(x)
         x = torch.relu(x)
-        x = torch.dropout(x, 0.1, train=True)
+        x = torch.dropout(x, 0.25, train=True)
         
         x = self.layer_4(x)
         x = torch.relu(x)
@@ -43,11 +41,8 @@ class LightningFMNISTClassifier(pl.LightningModule):
         x = torch.log_softmax(x, dim=1)
         return x
     
-    #тута надо lr и оптимайзер
     def configure_optimizers(self):
-        optimizer = hydra.utils.instantiate(self.optimizer, self.parameters(), lr=self.lr)
-        #optimizer = torch.optim.Adam(self.parameters(), lr=0.003)
-        #optimizer = torch.optim.SGD(self.parameters(), lr=0.003)
+        optimizer = hydra.utils.instantiate(self.opt_config, params=self.parameters())
         return optimizer
         
     
